@@ -1,7 +1,9 @@
 module Api
   module V1
     class MoviesController < ApplicationController
+      before_action :just_for_admin, only: [:create, :update, :destroy]
       before_action :load_movie, only: [:show,:update,:destroy]
+    
       def index
         movie_ids = params[:movie_ids].split(",")
 	      movies = Movie.where(id: movie_ids).order(:id)
@@ -46,6 +48,12 @@ module Api
         def load_movie
           @movie = Movie.find(params[:id])
         end
+
+        def just_for_admin
+          raise AuthorizationError unless current_user.admin
+        end
+
+
     end
   end
 end
