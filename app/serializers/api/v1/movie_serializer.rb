@@ -1,4 +1,4 @@
-class MovieSerializer < ActiveModel::Serializer
+class Api::V1::MovieSerializer < ActiveModel::Serializer
   attributes :id, :name, :preview_video_url, :runtime, :synopsis
   attribute :created_s, key: 'created_at'
   attribute :updated_s, key: 'updated_at'
@@ -6,7 +6,7 @@ class MovieSerializer < ActiveModel::Serializer
 
   def genres
     object.movie_genres.map do |genre| 
-      ::MovieGenreSerializer.new(genre).attributes
+      ::Api::V1::MovieGenreSerializer.new(genre).attributes
     end
   end
 
@@ -14,8 +14,9 @@ class MovieSerializer < ActiveModel::Serializer
   attribute :most_recent_scores
 
   def most_recent_scores
-	object.movie_scores.map do |score|
-      ::MovieScoreSerializer.new(score).attributes
+	  object.movie_scores.map do |score|
+      ::Api::V1::MovieScoreSerializer.new(score).attributes
+    end
   end
 
 end

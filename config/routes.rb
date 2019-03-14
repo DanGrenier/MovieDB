@@ -1,3 +1,12 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do 
+    namespace :v1 do 
+      #Movies endpoints
+      get '/movies' => 'movies#index'
+      get '/movies/:id' => 'movies#show'
+  	  post '/movies' => 'movies#create'
+  	  put '/movies/:id' => 'movies#update'
+  	  delete '/movies/:id' => 'movies#destroy'
+    end
+  end
 end
