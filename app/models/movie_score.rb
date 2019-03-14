@@ -5,7 +5,7 @@ class MovieScore < ApplicationRecord
   #Validations
   validates :score, presence: true
   #Users cannot score the same movie twice
-  validates :score, :uniqueness => {:scope => [:user_id,:movie_id], :message => 'You already scored that movie'}
+  validates :user_id, :uniqueness => {:scope => [:movie_id,:movie_id], :message => 'You already scored that movie'}
 
   #After scores are updated or added we update
   #the average score on the references movie
