@@ -1,0 +1,1 @@
+ActiveActiveModelSerializers.config.adapter = :json_api
