@@ -14,11 +14,15 @@ class Movie < ApplicationRecord
   validates :synopsis, presence: true
   #Scopes
   scope :with_ids, -> (movie_ids) {where(id: movie_ids).order(:id) }
-
+  
   alias_attribute  :genres , :movie_genres_attributes
   #Method that updates a movie score average
   #Called from MovieScore model when a score is added
   #or changed
+
+  def most_recent_scores
+    self.movie_scores.order('created_at DESC').limit(10)
+  end
   def update_score_average
   	avg = self.movie_scores.average('score').to_f || 0.00
   	self.update_columns(avg_score: avg)

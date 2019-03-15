@@ -114,9 +114,9 @@ describe Api::V1::MoviesController do
            "created_at" => movie.created_s,
            "updated_at" => movie.updated_s,
            "genres" => movie.movie_genres,
-           "most_recent_scores" => movie.movie_scores})
-      
-      end
+           "most_recent_scores" => movie.movie_scores
+           })
+      end  
     end
   end
 
@@ -220,8 +220,53 @@ describe Api::V1::MoviesController do
           expect{subject}.to change{MovieGenre.count}.by(2)
         end
       end
-    end
 
+      context "when trying to create a movie that already exists" do 
+        let(:movie) {create :movie}
+        let(:valid_attributes) do 
+          {
+            "data"=>{
+              "type"=>"movie",
+              "attributes"=>{
+                "name"=> movie.name,
+                "preview_video_url"=>'https://www.youtube.com/mysupermovie',
+                "runtime"=> '1 h 55 m',
+                "synopsis"=> 'An awesome super movie',
+                "genres"=>  [{"name"=> "Drama"},{"name" => "Romance"}]
+              }
+            }
+          }
+        end
+
+        subject {post :create, params: valid_attributes}
+
+        it "should have a 422 status code" do 
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should render proper json error" do
+          subject
+          expect(json['errors']).to include(
+          {
+            "source" => {"pointer"=>"/data/attributes/name"},
+            "detail" => "This movie already exists"
+          }) 
+        end
+
+        it "should not have created the movie" do 
+          #Call the movie before to create it
+          #Otherwise when calling subject, it would create the 
+          #article and then try to add it again... not changing the count  
+          movie
+          expect{subject}.to_not change{Movie.count}
+        end        
+
+        it "should not have created the genres" do 
+          expect{subject}.to_not change{MovieGenre.count}
+        end
+      end
+    end
   end
 
   describe "#put" do 
