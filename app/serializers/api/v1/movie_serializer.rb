@@ -14,7 +14,7 @@ class Api::V1::MovieSerializer < ActiveModel::Serializer
   attribute :most_recent_scores
 
   def most_recent_scores
-	  object.movie_scores.map do |score|
+	  object.movie_scores.order("created_at DESC").limit(50).map do |score|
       ::Api::V1::MovieScoreSerializer.new(score).attributes
     end
   end

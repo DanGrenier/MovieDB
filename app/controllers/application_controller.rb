@@ -40,13 +40,22 @@ class ApplicationController < ActionController::API
     render json: {"errors": [error]}, status: 403
   end
 
+  def parameter_error
+    error = {
+      "status" => "422",
+      "title" => "Please provide proper parameters",
+      "detail" => "Please provide a list of movie ids comma delimited under a movie_ids parameter"
+    }
+    render json: {"errors":[error], status: :unprocessable_entity}
+  end
+
   def not_found_error
   	error = {
   		"status" => "404",
   		"title" => "Record Not Found",
   		"detail" => "The specified record was not found"
   	}
-  	render json: {"errors":[error]}, status: :not_found
+  	render json: {"errors":[error], status: :not_found}
   end
 
 

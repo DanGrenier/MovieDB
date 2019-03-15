@@ -12,7 +12,10 @@ class Movie < ApplicationRecord
   validates :preview_video_url, presence: true
   validates :runtime, presence: true
   validates :synopsis, presence: true
+  #Scopes
+  scope :with_ids, -> (movie_ids) {where(id: movie_ids).order(:id) }
 
+  alias_attribute  :genres , :movie_genres_attributes
   #Method that updates a movie score average
   #Called from MovieScore model when a score is added
   #or changed
@@ -29,6 +32,15 @@ class Movie < ApplicationRecord
   #Method that converts the datetime updated to seconds
   def updated_s
   	created_at.to_i
+  end
+
+
+  def created_ms
+    created_at.to_datetime.strftime("%Q")
+  end
+
+  def updated_ms
+    updated_at.to_datetime.strftime("%Q")
   end
 
 

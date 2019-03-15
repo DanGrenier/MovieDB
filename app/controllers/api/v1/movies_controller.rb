@@ -3,11 +3,16 @@ module Api
     class MoviesController < ApplicationController
       before_action :just_for_admin, only: [:create, :update, :destroy]
       before_action :load_movie, only: [:show,:update,:destroy]
+
     
       def index
-        movie_ids = params[:movie_ids].split(",")
-	      movies = Movie.where(id: movie_ids).order(:id)
-	      render json: movies
+        if params[:movie_ids]
+          movie_ids = params[:movie_ids].split(",")
+	        movies = Movie.with_ids(movie_ids)
+	        render json: movies
+        else
+          parameter_error
+        end
       end 
 
       def show
@@ -42,7 +47,7 @@ module Api
       
       private
         def movie_params
-	        params.require(:data).require(:attributes).permit(:name,:preview_video_url,:runtime,:synopsis, movie_genres_attributes: [:id,:name])  
+	        params.require(:data).require(:attributes).permit(:name,:preview_video_url,:runtime,:synopsis, genres: [:id,:name]) 
         end
 
         def load_movie
