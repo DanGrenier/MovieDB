@@ -1,24 +1,31 @@
-# README
+# MovieDB
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a small API that creates and retrieves
+movie metadata and allows users to score
+the movies :
 
-Things you may want to cover:
+* Ruby 2.5
 
-* Ruby version
+* Rails 5.2.2
 
-* System dependencies
+* Active Model Serializers
 
-* Configuration
+* json_api
 
-* Database creation
+* Rspec and FactoryBot for testing
 
-* Database initialization
+* Clone the repository and run bundle install
 
-* How to run the test suite
+* Copy the database.yml from the config/sample folder to the config folder
 
-* Services (job queues, cache servers, search engines, etc.)
+* Make sure postgresql is installed on the local machine
 
-* Deployment instructions
+* Replac your_user_name and your_password in the database.yml file with the credentials needed to connect to your postgresql server
 
-* ...
+* If you don't know what the credentials are, simply use your local machine username and remove the password attribute from the file
+
+* run: rails db:create , rails db:migrate and rails db:seed (if you want some sample data loaded)
+
+* run: bundle exec rspec and every test should be passing
+
+
