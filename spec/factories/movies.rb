@@ -4,6 +4,6 @@ FactoryBot.define do
     sequence(:preview_video_url) {|n| "https://www.youtube.com/mymovie#{n}"}
     runtime {"1hr 30min"}
     sequence (:synopsis) {|n| "Main plot of the story of My Movie#{n}"}
-    avg_score {0.0}
+    avg_score {80.0}
   end
 end

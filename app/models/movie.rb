@@ -14,7 +14,8 @@ class Movie < ApplicationRecord
   validates :synopsis, presence: true
   #Scopes
   scope :with_ids, -> (movie_ids) {where(id: movie_ids).order(:id) }
-  
+  scope :all_ordered, -> {order(:id)}
+  scope :with_min_score, -> (score) {where('avg_score >= ?',score).order(:id)}
   alias_attribute  :genres , :movie_genres_attributes
   #Method that updates a movie score average
   #Called from MovieScore model when a score is added

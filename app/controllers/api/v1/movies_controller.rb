@@ -8,11 +8,12 @@ module Api
       def index
         if params[:movie_ids]
           movie_ids = params[:movie_ids].split(",")
-	        movies = Movie.with_ids(movie_ids)
-	        render json: movies
+          movies = Movie.with_ids(movie_ids)
         else
-          parameter_error
+          movies = Movie.all_ordered
         end
+
+        render json: movies
       end 
 
       def show

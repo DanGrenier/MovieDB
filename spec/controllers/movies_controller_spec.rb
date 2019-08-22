@@ -2,8 +2,10 @@ require 'rails_helper'
 
 describe Api::V1::MoviesController do 
   describe "#index" do 
-    let(:movie1) {create :movie}	
-    let(:movie2) {create :movie}	
+    let!(:movie1) {create :movie, avg_score: 80.0}	
+    let!(:movie2) {create :movie, avg_score: 70.0}
+    let!(:movie3) {create :movie, avg_score: 65.0}
+
     subject {get :index}
     
     context 'when no access token is provided' do 
@@ -34,13 +36,19 @@ describe Api::V1::MoviesController do
 
         it "should return proper json" do 
           subject
-          expect(json['errors']).to include(
-            {
-              "title" => "Please provide proper parameters",
-              "detail" => "Please provide a list of movie ids comma delimited under a movie_ids parameter",
-              "status" => "422"
-            })
-
+          p json_data
+          Movie.all_ordered.each_with_index do |movie,index|
+          expect(json_data[index]['attributes']).to eq(
+           {"name" => movie.name,
+           "avg_score" => movie.avg_score.to_s, 
+           "preview_video_url" => movie.preview_video_url,
+           "runtime" => movie.runtime,
+           "synopsis" => movie.synopsis,
+           "created_at" => movie.created_s,
+           "updated_at" => movie.updated_s,
+           "genres" => movie.movie_genres,
+           "most_recent_scores" => movie.movie_scores})
+          end
         end
       end 
       
@@ -62,7 +70,8 @@ describe Api::V1::MoviesController do
 
         it "should return proper json" do 
           subject
-          Movie.all.each_with_index do |movie,index|
+          p json_data
+          Movie.with_ids([movie1.id,movie2.id]).each_with_index do |movie,index|
       	  expect(json_data[index]['attributes']).to eq(
       		 {"name" => movie.name,
       		 "avg_score" => movie.avg_score.to_s,	
